@@ -12,7 +12,6 @@ A production-ready **Spring Boot** application implementing **User Management wi
 - 🐘 PostgreSQL for persistent storage
 - 🐳 Docker & Docker Compose support
 - 📊 Spring Boot Actuator & Swagger UI (OpenAPI)
-- ♻️ Test containers & config-driven architecture
 
 ---
 
@@ -39,8 +38,7 @@ DTO Mapper
 | Auth         | JWT (JJWT `0.12.6`)                    |
 | API Docs     | Springdoc OpenAPI + Swagger UI         |
 | Dev Tools    | Spring Boot DevTools, Actuator         |
-| Deployment   | Docker, Docker Compose                 |
-| Testing      | JUnit, Spring Boot Test                |
+| Deployment   | Docker, Docker Compose                  |
 
 ---
 
@@ -110,6 +108,7 @@ src
 │   │   ├── controller       # REST Controllers (Auth, User, Role)
 │   │   ├── dto              # Data Transfer Objects for API requests/responses
 │   │   ├── entity           # JPA Entities (User, Role, Permission)
+│   │   ├── exception        # Exception Handling
 │   │   ├── mapper           # MapStruct or manual DTO <-> Entity mappers
 │   │   ├── repository       # Spring Data JPA Repositories
 │   │   ├── service          # Service Interfaces / Service Implementations
@@ -149,14 +148,6 @@ curl http://localhost:8080/actuator/health
 
 
 ---
-
-Let me know if you'd like to include:
-- Postman collection
-- GitHub badges
-- Swagger screenshot
-- Instructions for deploying to AWS or Railway
-
-I'll help you finalize the GitHub structure next.
 
 ## 🧪 Sample SQL Data for Testing
 
