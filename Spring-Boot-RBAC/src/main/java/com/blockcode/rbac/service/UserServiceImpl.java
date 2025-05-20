@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService  {
         u.setEmail(dto.getEmail());
         u.setPassword(encoder.encode(dto.getPassword()));
         Set<Role> roles = dto.getRoles().stream()
-                .map(rdto -> roleRepository.findByName(rdto.getName())
+                .map(rdto -> roleRepository.findById(rdto.getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Role not found")))
                 .collect(Collectors.toSet());
         u.setRoles(roles);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService  {
             u.setPassword(encoder.encode(dto.getPassword()));
         }
         Set<Role> roles = dto.getRoles().stream()
-                .map(rdto -> roleRepository.findByName(rdto.getName())
+                .map(rdto -> roleRepository.findById(rdto.getId())
                         .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + rdto.getName())))
                 .collect(Collectors.toSet());
         u.setRoles(roles);

@@ -22,12 +22,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleAll(Exception ex, HttpServletRequest request) {
+        ex.printStackTrace(); // ✅ Keep for logs
         ApiError err = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An unexpected error occurred",
+                ex.getClass().getSimpleName(), // Show exception type
+                ex.getMessage(),               // Show actual error
                 request.getRequestURI()
         );
         return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

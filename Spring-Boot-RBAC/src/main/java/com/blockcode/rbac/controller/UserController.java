@@ -18,25 +18,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAuthority('VIEW_USER')")
-    @GetMapping("/{id}")
+//    @PreAuthorize("hasAuthority('VIEW_USER')")
+    @GetMapping()
     public List<UserDTO> list() {
         return  userService.getAll();
     }
 
-    @PreAuthorize("hasAuthority('CREATE_USER')")
+//    @PreAuthorize("hasAuthority('CREATE_USER')")
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
         return new ResponseEntity<>(userService.create(dto), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('EDIT_USER')")
+//    @PreAuthorize("hasAuthority('EDIT_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto) {
         return new ResponseEntity<>(userService.update(id, dto), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('DELETE_USER')")
+//    @PreAuthorize("hasAuthority('DELETE_USER')")
     @DeleteMapping
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);

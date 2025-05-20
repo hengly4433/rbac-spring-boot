@@ -1,22 +1,26 @@
-# === Stage 1: Build ===
-FROM maven:3.8.6-openjdk-17 AS builder
+# === 1. Build stage ===
+FROM maven:3-eclipse-temurin-21 AS builder
 WORKDIR /app
 
-# copy maven config and source
+# Copy pom.xml and download dependencies first (layer caching)
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy actual source code after dependencies
 COPY src ./src
 
-# build without running tests
-RUN mvn clean package -DskipTests
+# Build the project with Maven (skip tests for speed)
+RUN mvn clean package spring-boot:repackage -DskipTests -B
 
-# === Stage 2: Package ===
-FROM eclipse-temurin:17-jre
+# === 2. Runtime stage ===
+FROM eclipse-temurin:21-jre AS runner
 WORKDIR /app
 
-# copy the fat JAR from builder
-COPY --from=builder /app/target/*.jar app.jar
+# Copy the fat JAR (Spring Boot repackaged JAR) from builder
+COPY --from=builder /app/target/Spring-Boot-RBAC-0.0.1-SNAPSHOT.jar app.jar
 
-# non-root user (optional)
+# OPTIONAL: run as non-root user (recommended for containers)
 USER 1000
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

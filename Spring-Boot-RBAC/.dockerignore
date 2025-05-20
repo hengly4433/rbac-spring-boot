@@ -1,7 +1,4 @@
 target/
-.mvn/
 .git
-.gitignore
-README.md
-src/**/*.java
-!src/**/*.properties
+*.iml
+.idea/

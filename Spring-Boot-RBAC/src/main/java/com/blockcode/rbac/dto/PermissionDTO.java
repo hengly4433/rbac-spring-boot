@@ -7,7 +7,8 @@ public class PermissionDTO {
     public PermissionDTO() {
     }
 
-    public PermissionDTO(String name) {
+    public PermissionDTO(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

@@ -2,6 +2,7 @@ package com.blockcode.rbac.dto;
 
 import com.blockcode.rbac.entity.Role;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserDTO {
@@ -9,7 +10,7 @@ public class UserDTO {
     private String username;
     private String email;
     private String password;
-    private Set<RoleDTO> roles;
+    private Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {
     }

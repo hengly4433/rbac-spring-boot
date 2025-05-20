@@ -2,12 +2,13 @@ package com.blockcode.rbac.dto;
 
 import com.blockcode.rbac.entity.Permission;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class RoleDTO {
     private Long id;
     private String name;
-    private Set<PermissionDTO> permissions;
+    private Set<PermissionDTO> permissions = new HashSet<>();
 
     public RoleDTO() {
     }

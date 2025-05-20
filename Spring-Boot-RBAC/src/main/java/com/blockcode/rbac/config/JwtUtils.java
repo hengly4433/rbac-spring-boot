@@ -1,15 +1,12 @@
 package com.blockcode.rbac.config;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
+import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Key;
 import java.util.Date;
 
@@ -18,21 +15,24 @@ public class JwtUtils {
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${app.jwtExpirations}")
-    private int jwtExpirationMs;
+    @Value("${app.jwtExpirationMs}")
+    private long jwtExpirationMs;
 
     private Key key;
 
     @PostConstruct
     public void init() {
-        key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(UserDetails userDetails) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + jwtExpirationMs);
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .setIssuedAt(now)
+                .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -57,5 +57,4 @@ public class JwtUtils {
             return false;
         }
     }
-
 }
