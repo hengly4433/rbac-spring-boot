@@ -7,6 +7,7 @@ import com.blockcode.rbac.exception.ResourceNotFoundException;
 import com.blockcode.rbac.mapper.RoleMapper;
 import com.blockcode.rbac.repository.PermissionRepository;
 import com.blockcode.rbac.repository.RoleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
@@ -50,6 +52,19 @@ public class RoleServiceImpl implements RoleService {
                 .collect(Collectors.toSet());
         role.setPermissions(permissions);
         return RoleMapper.toDTO(roleRepository.save(role));
+    }
+
+    @Override
+    public RoleDTO assignPermissions(Long roleId, Set<Long> permissionIds) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleId));
+        Set<Permission> permissions = permissionIds.stream()
+                .map(pid -> permissionRepository.findById(pid)
+                        .orElseThrow(() -> new ResourceNotFoundException("Permission not found: " + pid)))
+                .collect(Collectors.toSet());
+        role.setPermissions(permissions);
+        Role saved = roleRepository.save(role);
+        return RoleMapper.toDTO(saved);
     }
 
     @Override

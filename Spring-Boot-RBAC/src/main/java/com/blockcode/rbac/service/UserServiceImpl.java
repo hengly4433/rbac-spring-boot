@@ -7,6 +7,7 @@ import com.blockcode.rbac.exception.ResourceNotFoundException;
 import com.blockcode.rbac.mapper.UserMapper;
 import com.blockcode.rbac.repository.RoleRepository;
 import com.blockcode.rbac.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService  {
 
     private final UserRepository userRepository;
@@ -63,6 +65,19 @@ public class UserServiceImpl implements UserService  {
                 .collect(Collectors.toSet());
         u.setRoles(roles);
         return UserMapper.toDTO(userRepository.save(u));
+    }
+
+    @Override
+    public UserDTO assignRoles(Long userId, Set<Long> roleIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
+        Set<Role> roles = roleIds.stream()
+                .map(rid -> roleRepository.findById(rid)
+                        .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + rid)))
+                .collect(Collectors.toSet());
+        user.setRoles(roles);
+        User saved = userRepository.save(user);
+        return  UserMapper.toDTO(saved);
     }
 
     @Override

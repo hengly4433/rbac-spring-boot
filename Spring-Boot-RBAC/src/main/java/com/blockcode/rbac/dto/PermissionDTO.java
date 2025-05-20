@@ -1,7 +1,11 @@
 package com.blockcode.rbac.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class PermissionDTO {
     private Long id;
+
+    @NotBlank(message = "Permission name must not be blank")
     private  String name;
 
     public PermissionDTO() {

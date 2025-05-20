@@ -18,27 +18,27 @@ public class PermissionController {
         this.permissionService = permissionService;
     }
 
-//    @PreAuthorize("hasAuthority('VIEW_PERMISSION')")
+    @PreAuthorize("hasAuthority('VIEW_PERMISSION')")
     @GetMapping
     public List<PermissionDTO> list() { return  permissionService.getAll(); }
 
-//    @PreAuthorize("hasAuthority('VIEW_PERMISSION')")
+    @PreAuthorize("hasAuthority('VIEW_PERMISSION')")
     @GetMapping("/{id}")
     public PermissionDTO get(@PathVariable Long id) { return  permissionService.getById(id);  }
 
-//    @PreAuthorize("hasAuthority('CRATE_PERMISSION')")
+    @PreAuthorize("hasAuthority('CRATE_PERMISSION')")
     @PostMapping
     public ResponseEntity<PermissionDTO> create(@RequestBody PermissionDTO dto) {
         return new ResponseEntity<>(permissionService.create(dto), HttpStatus.CREATED);
     }
 
-//    @PreAuthorize("hasAuthority('EDIT_PERMISSION')")
+    @PreAuthorize("hasAuthority('EDIT_PERMISSION')")
     @PutMapping("/{id}")
     public PermissionDTO update(@PathVariable Long id, @RequestBody PermissionDTO dto) {
         return permissionService.update(id, dto);
     }
 
-//    @PreAuthorize("hasAuthority('DELETE_PERMISSION')")
+    @PreAuthorize("hasAuthority('DELETE_PERMISSION')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         permissionService.delete(id);
